@@ -13,7 +13,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func test() {
+func save(token *model.DeployedToken) {
 	session := service.Session()
 
 	defer session.Close()
@@ -21,15 +21,25 @@ func test() {
 	// Optional. Switch the session to a monotonic behavior.
 	session.SetMode(mgo.Monotonic, true)
 
-	c := session.DB("test").C("people")
-	err := c.Insert(&model.DeployedToken{"Ale", "+55 53 8116 9639"},
-		&model.DeployedToken{"Cla", "+55 53 8402 8510"})
+	c := session.DB("InfraRepository").C("DeployedToken")
+	err := c.Insert(token)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+}
+func listDeployedTokens() {
+	session := service.Session()
+
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB("InfraRepository").C("DeployedToken")
+
 	result := model.DeployedToken{}
-	err = c.Find(bson.M{"name": "Ale"}).One(&result)
+	err := c.Find(bson.M{"name": "Ale"}).All()
 	if err != nil {
 		log.Fatal(err)
 	}
