@@ -2,7 +2,7 @@
 package main
 
 import (
-	"fmt"
+	_ "fmt"
 	"log"
 	"net/http"
 
@@ -28,7 +28,7 @@ func save(token *model.DeployedToken) {
 	}
 
 }
-func listDeployedTokens() {
+func listDeployedTokens() *[]model.DeployedToken {
 	session := service.Session()
 
 	defer session.Close()
@@ -38,27 +38,16 @@ func listDeployedTokens() {
 
 	c := session.DB("InfraRepository").C("DeployedToken")
 
-	result := model.DeployedToken{}
-	err := c.Find(bson.M{"name": "Ale"}).All()
+	result := []model.DeployedToken{}
+	err := c.Find(bson.M{"name": "Ale"}).Limit(10).All(&result)
 	if err != nil {
-		log.Fatal(err)
-	}
 
-	fmt.Println("Phone:", result.Phone)
+	}
+	return &result
+
 }
 func myHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := mgo.Dial("localhost")
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
 
-	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("bbb").C("jjjj")
-	result := model.DeployedToken{}
-	c.Find("yyy").One(&result)
-	fmt.Fprintf(w, "Hello there!\n")
 }
 
 func main() {
