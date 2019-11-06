@@ -6,6 +6,6 @@ import (
 
 var mysession, err = mgo.Dial("localhost")
 
-func session() *mgo.Session {
+func Session() *mgo.Session {
 	return mysession.Copy()
 }
