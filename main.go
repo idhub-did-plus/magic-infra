@@ -32,12 +32,8 @@ func listDeployedTokens() *[]model.DeployedToken {
 	session := service.Session()
 
 	defer session.Close()
-
-	// Optional. Switch the session to a monotonic behavior.
 	session.SetMode(mgo.Monotonic, true)
-
 	c := session.DB("InfraRepository").C("DeployedToken")
-
 	result := []model.DeployedToken{}
 	err := c.Find(bson.M{"name": "Ale"}).Limit(10).All(&result)
 	if err != nil {
