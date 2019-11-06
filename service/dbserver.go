@@ -1,4 +1,4 @@
-package dbtest
+package service
 
 import (
 	"bytes"

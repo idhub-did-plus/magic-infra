@@ -1,5 +1,5 @@
 // magic-infra project main.go
-package main
+package service
 
 import (
 	"fmt"

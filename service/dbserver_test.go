@@ -1,4 +1,4 @@
-package dbtest_test
+package service
 
 import (
 	"os"
