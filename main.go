@@ -70,6 +70,6 @@ func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
-	http.HandleFunc("/", listDeployedTokens)
+	http.HandleFunc("/listDeployedTokens", listDeployedTokens)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
