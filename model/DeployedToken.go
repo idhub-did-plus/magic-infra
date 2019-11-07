@@ -1,6 +1,6 @@
 package model
 
 type DeployedToken struct {
-	Name  string
-	Phone string
+	Name  string `json:"name"`
+	Phone string `json:phone`
 }

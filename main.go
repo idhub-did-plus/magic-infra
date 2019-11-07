@@ -3,14 +3,12 @@ package main
 
 import (
 	"bytes"
-	"fmt"
-	"io"
+
 	"io/ioutil"
 	"log"
 	"magic-infra/model"
 	"magic-infra/service"
 	"net/http"
-	"strings"
 
 	"encoding/json"
 
@@ -33,14 +31,19 @@ func save(token *model.DeployedToken) {
 	}
 
 }
-func listDeployedTokens() *[]model.DeployedToken {
+func listDeployedTokens(w http.ResponseWriter, r *http.Request) {
+	tokens := list()
+	result, _ := json.Marshal(&tokens)
+	w.Write(result)
+}
+func list() *[]model.DeployedToken {
 	session := service.Session()
 
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("InfraRepository").C("DeployedToken")
 	result := []model.DeployedToken{}
-	err := c.Find(bson.M{"name": "Ale"}).Limit(10).All(&result)
+	err := c.Find(bson.M{"name": "byq"}).Limit(10).All(&result)
 	if err != nil {
 
 	}
@@ -49,7 +52,10 @@ func listDeployedTokens() *[]model.DeployedToken {
 }
 func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
 	jsonb, _ := ioutil.ReadAll(r.Body)
+	jsonss := string(jsonb)
+	log.Println(jsonss)
 	jsons := bytes.NewReader(jsonb)
+
 	dec := json.NewDecoder(jsons)
 	result := model.DeployedToken{}
 	dec.Decode(&result)
@@ -64,27 +70,6 @@ func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
+	http.HandleFunc("/", listDeployedTokens)
 	log.Fatal(http.ListenAndServe(":8080", nil))
-}
-func test() {
-	const jsonStream = `
-	{"Name": "Ed", "Text": "Knock knock."}
-	{"Name": "Sam", "Text": "Who's there?"}
-	{"Name": "Ed", "Text": "Go fmt."}
-	{"Name": "Sam", "Text": "Go fmt who?"}
-	{"Name": "Ed", "Text": "Go fmt yourself!"}
-`
-	type Message struct {
-		Name, Text string
-	}
-	dec := json.NewDecoder(strings.NewReader(jsonStream))
-	for {
-		var m Message
-		if err := dec.Decode(&m); err == io.EOF {
-			break
-		} else if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("%s: %s\n", m.Name, m.Text)
-	}
 }

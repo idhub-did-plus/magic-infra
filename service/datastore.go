@@ -4,7 +4,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-var mysession, err = mgo.Dial("mongodb://admin:123456@localhost:27017/admin")
+var mysession, err = mgo.Dial("mongodb://localhost:27017")
 
 func Session() *mgo.Session {
 	return mysession.Copy()
