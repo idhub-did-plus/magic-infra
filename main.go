@@ -16,21 +16,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func save(token *model.DeployedToken) {
-	session := service.Session()
-
-	defer session.Close()
-
-	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-
-	c := session.DB("InfraRepository").C("DeployedToken")
-	err := c.Insert(token)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-}
 func listDeployedTokens(w http.ResponseWriter, r *http.Request) {
 	tokens := list()
 	result, _ := json.Marshal(&tokens)
@@ -51,8 +36,15 @@ func list() *[]model.DeployedToken {
 
 }
 func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 	jsonb, _ := ioutil.ReadAll(r.Body)
 	jsonss := string(jsonb)
+	if jsonss == "" {
+		w.Write([]byte("{\"success\":true, \"message\":\"saved!\"}"))
+		return
+	}
+
 	log.Println(jsonss)
 	jsons := bytes.NewReader(jsonb)
 
@@ -66,6 +58,7 @@ func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("InfraRepository").C("DeployedToken")
 	c.Insert(&result)
+	w.Write([]byte("{\"success\":true, \"message\":\"saved!\"}"))
 }
 
 func main() {
