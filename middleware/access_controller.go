@@ -3,11 +3,24 @@ package middleware
 import (
 	"net/http"
 
+	"fmt"
+	"time"
+
+	"github.com/allegro/bigcache"
 	_ "github.com/casbin/casbin"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
+var GlobalCache *bigcache.BigCache
+
+func init() {
+	var err error
+	GlobalCache, err = bigcache.NewBigCache(bigcache.DefaultConfig(30 * time.Minute)) // Set expire time to 30 mins
+	if err != nil {
+		panic(fmt.Sprintf("failed to initialize cahce: %v", err))
+	}
+}
 func AclMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
