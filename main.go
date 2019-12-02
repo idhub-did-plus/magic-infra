@@ -18,10 +18,10 @@ import (
 
 func listDeployedTokens(c *gin.Context) {
 	tokens := list()
-	result, _ := json.Marshal(&tokens)
+	//result, _ := json.Marshal(&tokens)
 	c.JSON(200, gin.H{
-		"success": false,
-		"data":    result,
+		"success": true,
+		"data":    tokens,
 	})
 
 }
@@ -43,20 +43,20 @@ func list() *[]model.DeployedToken {
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-		c.Header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE")
-		c.Set("content-type", "application/json")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type") // 这是允许访问所有域
+		// 设置返回格式是json
 
-		c.Next()
+		c.Next() //  处理请求
 	}
 }
 
 func saveDeployedToken(c *gin.Context) {
 	// w.Header().Set("Access-Control-Allow-Origin", "*")
 	// w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	body := c.Request.Body
-
 	jsonb, _ := ioutil.ReadAll(body)
 	jsonss := string(jsonb)
 	if jsonss == "" {
@@ -92,7 +92,7 @@ func saveDeployedToken(c *gin.Context) {
 func main() {
 	r := gin.Default()
 	r.Use(CorsMiddleware())
-	r.GET("/saveDeployedToken", saveDeployedToken)
+	r.POST("/saveDeployedToken", saveDeployedToken)
 	r.GET("/listDeployedTokens", listDeployedTokens)
 
 	r.Run() // 在 0.0.0.0:8080 上监听并服务
