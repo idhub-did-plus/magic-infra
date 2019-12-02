@@ -9,7 +9,7 @@ import (
 	"log"
 	"magic-infra/model"
 	"magic-infra/service"
-	_ "net/http"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
@@ -42,25 +42,33 @@ func list() *[]model.DeployedToken {
 
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		method := c.Request.Method
 
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type") // 这是允许访问所有域
-		// 设置返回格式是json
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token")
+		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
+		c.Header("Access-Control-Allow-Credentials", "true")
 
-		c.Next() //  处理请求
+		//放行所有OPTIONS方法
+		if method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+		// 处理请求
+		c.Next()
 	}
 }
 
 func saveDeployedToken(c *gin.Context) {
 	// w.Header().Set("Access-Control-Allow-Origin", "*")
 	// w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
-	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	// c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	// c.Writer.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 	body := c.Request.Body
 	jsonb, _ := ioutil.ReadAll(body)
 	jsonss := string(jsonb)
 	if jsonss == "" {
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"success": false,
 			"message": "no data!",
 		})
@@ -82,7 +90,7 @@ func saveDeployedToken(c *gin.Context) {
 	collection := session.DB("InfraRepository").C("DeployedToken")
 	collection.Insert(&result)
 
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "saved!",
 	})
