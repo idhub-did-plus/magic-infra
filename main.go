@@ -17,6 +17,7 @@ func main() {
 	r.Use(sessions.Sessions("mysession", store))
 	r.POST("/saveDeployedToken", controller.SaveDeployedToken)
 	r.GET("/listDeployedTokens", controller.ListDeployedTokens)
+	r.GET("/login", controller.Login)
 	r.GET("/hello", func(c *gin.Context) {
 		session := sessions.Default(c)
 		if session.Get("hello") != "world" {
