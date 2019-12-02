@@ -90,6 +90,7 @@ func main() {
 	r := gin.Default()
 	r.Use(CorsMiddleware())
 	r.GET("/saveDeployedToken", saveDeployedToken)
+	r.GET("/listDeployedTokens", listDeployedTokens)
 
 	r.Run() // 在 0.0.0.0:8080 上监听并服务
 	// mux := http.NewServeMux()
