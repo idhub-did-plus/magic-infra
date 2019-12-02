@@ -13,6 +13,7 @@ import (
 
 	_ "github.com/cloudflare/roughtime"
 
+	_ "github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -63,7 +64,9 @@ func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
-	http.HandleFunc("/listDeployedTokens", listDeployedTokens)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
+	mux.HandleFunc("/listDeployedTokens", listDeployedTokens)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
