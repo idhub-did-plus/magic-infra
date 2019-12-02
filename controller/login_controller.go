@@ -42,3 +42,5 @@ func Login(c *gin.Context) {
 	})
 
 }
+
+//https://dev.to/maxwellhertz/tutorial-integrate-gin-with-cabsin-56m0
