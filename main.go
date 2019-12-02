@@ -62,8 +62,6 @@ func CorsMiddleware() gin.HandlerFunc {
 func saveDeployedToken(c *gin.Context) {
 	// w.Header().Set("Access-Control-Allow-Origin", "*")
 	// w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
-	// c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	// c.Writer.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 	body := c.Request.Body
 	jsonb, _ := ioutil.ReadAll(body)
 	jsonss := string(jsonb)
@@ -103,7 +101,7 @@ func main() {
 	r.POST("/saveDeployedToken", saveDeployedToken)
 	r.GET("/listDeployedTokens", listDeployedTokens)
 
-	r.Run() // 在 0.0.0.0:8080 上监听并服务
+	r.Run(":8080") // 在 0.0.0.0:8080 上监听并服务
 	// mux := http.NewServeMux()
 	// mux.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
 	// mux.HandleFunc("/listDeployedTokens", listDeployedTokens)
