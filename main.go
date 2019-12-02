@@ -9,19 +9,18 @@ import (
 	"log"
 	"magic-infra/model"
 	"magic-infra/service"
-	"net/http"
+	_ "net/http"
 
-	_ "github.com/cloudflare/roughtime"
-
-	_ "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-func listDeployedTokens(w http.ResponseWriter, r *http.Request) {
+func listDeployedTokens(c *gin.Context) {
 	tokens := list()
 	result, _ := json.Marshal(&tokens)
-	w.Write(result)
+	c.JSON(200, result)
+
 }
 func list() *[]model.DeployedToken {
 	session := service.Session()
@@ -37,13 +36,32 @@ func list() *[]model.DeployedToken {
 	return &result
 
 }
-func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
-	jsonb, _ := ioutil.ReadAll(r.Body)
+
+func CorsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		c.Header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE")
+		c.Set("content-type", "application/json")
+
+		c.Next()
+	}
+}
+
+func saveDeployedToken(c *gin.Context) {
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
+	body := c.Request.Body
+
+	jsonb, _ := ioutil.ReadAll(body)
 	jsonss := string(jsonb)
 	if jsonss == "" {
-		w.Write([]byte("{\"success\":true, \"message\":\"saved!\"}"))
+		c.JSON(200, gin.H{
+			"success": false,
+			"message": "no data!",
+		})
+
 		return
 	}
 
@@ -58,15 +76,24 @@ func saveDeployedToken(w http.ResponseWriter, r *http.Request) {
 
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("InfraRepository").C("DeployedToken")
-	c.Insert(&result)
-	w.Write([]byte("{\"success\":true, \"message\":\"saved!\"}"))
+	collection := session.DB("InfraRepository").C("DeployedToken")
+	collection.Insert(&result)
+
+	c.JSON(200, gin.H{
+		"success": true,
+		"message": "saved!",
+	})
+
 }
 
 func main() {
+	r := gin.Default()
+	r.Use(CorsMiddleware())
+	r.GET("/saveDeployedToken", saveDeployedToken)
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
-	mux.HandleFunc("/listDeployedTokens", listDeployedTokens)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	r.Run() // 在 0.0.0.0:8080 上监听并服务
+	// mux := http.NewServeMux()
+	// mux.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
+	// mux.HandleFunc("/listDeployedTokens", listDeployedTokens)
+	// log.Fatal(http.ListenAndServe(":8080", nil))
 }
