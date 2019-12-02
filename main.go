@@ -4,13 +4,14 @@ package main
 import (
 	"bytes"
 
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"magic-infra/model"
 	"magic-infra/service"
 	"net/http"
 
-	"encoding/json"
+	_ "github.com/cloudflare/roughtime"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"

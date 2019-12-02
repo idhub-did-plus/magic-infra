@@ -1,12 +1,12 @@
 package model
 
 type DeployedToken struct {
-	Name            string   `json:"name"`
-	Symbol          string   `json:"symbol"`
-	Decimals        string   `json:"decimals"`
-	ContractAddress string   `json:"contractAddress"`
-	DeployAccount   string   `json:"deployAccount"`
-	TokenType       string   `json:"tokenType"`
-	Controllers     []string `json:"controllers"`
-	RegistryAddress string   `json:"registryAddress"`
+	Name            string
+	Symbol          string
+	Decimals        string
+	ContractAddress string
+	DeployAccount   string
+	TokenType       string
+	Controllers     []string
+	RegistryAddress string
 }
