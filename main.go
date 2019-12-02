@@ -19,7 +19,10 @@ import (
 func listDeployedTokens(c *gin.Context) {
 	tokens := list()
 	result, _ := json.Marshal(&tokens)
-	c.JSON(200, result)
+	c.JSON(200, gin.H{
+		"success": false,
+		"data":    result,
+	})
 
 }
 func list() *[]model.DeployedToken {
