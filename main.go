@@ -11,9 +11,13 @@ import (
 	"magic-infra/service"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+
+	// 导入session存储引擎
+	"github.com/gin-contrib/sessions/cookie"
 )
 
 func listDeployedTokens(c *gin.Context) {
@@ -98,10 +102,33 @@ func saveDeployedToken(c *gin.Context) {
 func main() {
 	r := gin.Default()
 	r.Use(CorsMiddleware())
+
+	store := cookie.NewStore([]byte("secret11111"))
+	// 设置session中间件，参数mysession，指的是session的名字，也是cookie的名字
+	// store是前面创建的存储引擎，我们可以替换成其他存储引擎
+	r.Use(sessions.Sessions("mysession", store))
 	r.POST("/saveDeployedToken", saveDeployedToken)
 	r.GET("/listDeployedTokens", listDeployedTokens)
+	r.GET("/hello", func(c *gin.Context) {
+		// 初始化session对象
+		session := sessions.Default(c)
 
-	r.Run(":8080") // 在 0.0.0.0:8080 上监听并服务
+		// 通过session.Get读取session值
+		// session是键值对格式数据，因此需要通过key查询数据
+		if session.Get("hello") != "world" {
+			// 设置session数据
+			session.Set("hello", "world")
+			// 删除session数据
+			session.Delete("tizi365")
+			// 保存session数据
+			session.Save()
+			// 删除整个session
+			// session.Clear()
+		}
+
+		c.JSON(200, gin.H{"hello": session.Get("hello")})
+	})
+	r.Run() // 在 0.0.0.0:8080 上监听并服务
 	// mux := http.NewServeMux()
 	// mux.HandleFunc("/saveDeployedToken", saveDeployedToken) //	设置访问路由
 	// mux.HandleFunc("/listDeployedTokens", listDeployedTokens)
