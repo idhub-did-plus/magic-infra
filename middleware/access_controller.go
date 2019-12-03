@@ -23,21 +23,27 @@ func init() {
 }
 func AclMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
+		if c.FullPath() == "/login" {
+			c.Next()
+			return
+		}
 		session := sessions.Default(c)
-		if nil == session.Get("current_role_code") {
-			//session中取不到当前选中的角色,未登录?
+		if nil == session.Get("claim") {
 			c.Redirect(http.StatusTemporaryRedirect, "/login")
 			return
 		}
-		current_user_role := session.Get("current_role_code").(string) //从session取出当前用户选中的角色
-		sub := current_user_role
-
-		if sub == "" {
-
-			c.Abort()
+		claim := session.Get("claim").(string) //从session取出当前用户选中的角色
+		if !filter(c, claim) {
+			c.JSON(http.StatusForbidden, gin.H{
+				"success": false,
+				"message": "access denied!",
+			})
 			return
 		}
 		c.Next()
 	}
+
+}
+func filter(c *gin.Context, claim string) bool {
+	return true
 }

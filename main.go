@@ -17,16 +17,7 @@ func main() {
 	r.Use(sessions.Sessions("mysession", store))
 	r.POST("/saveDeployedToken", controller.SaveDeployedToken)
 	r.GET("/listDeployedTokens", controller.ListDeployedTokens)
-	r.GET("/login", controller.Login)
-	r.GET("/hello", func(c *gin.Context) {
-		session := sessions.Default(c)
-		if session.Get("hello") != "world" {
-			session.Set("hello", "world")
-			session.Delete("tizi365")
-			session.Save()
-		}
+	r.Any("/login", controller.Login)
 
-		c.JSON(200, gin.H{"hello": session.Get("hello")})
-	})
 	r.Run() // 在 0.0.0.0:8080 上监听并服务
 }
