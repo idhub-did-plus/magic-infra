@@ -7,6 +7,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	//solsha3 "github.com/miguelmota/go-solidity-sha3"
 )
 
 const abiraw = `[
