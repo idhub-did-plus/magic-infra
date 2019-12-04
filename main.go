@@ -2,12 +2,11 @@
 package main
 
 import (
-	"magic-infra/controller"
-	"magic-infra/middleware"
-
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"magic-infra/controller"
+	"magic-infra/middleware"
 )
 
 func main() {
