@@ -54,5 +54,5 @@ func AclMiddleware() gin.HandlerFunc {
 
 }
 func filter(c *gin.Context, claim string) bool {
-	return false
+	return true
 }
