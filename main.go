@@ -3,6 +3,7 @@ package main
 
 import (
 	"magic-infra/controller"
+	"magic-infra/middleware"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -11,10 +12,11 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.Use(controller.CorsMiddleware())
-
 	store := cookie.NewStore([]byte("secret11111"))
 	r.Use(sessions.Sessions("mysession", store))
+	r.Use(controller.CorsMiddleware())
+	r.Use(middleware.AclMiddleware())
+
 	r.POST("/saveDeployedToken", controller.SaveDeployedToken)
 	r.GET("/listDeployedTokens", controller.ListDeployedTokens)
 	r.Any("/login", controller.Login)

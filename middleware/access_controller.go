@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"time"
 
+	_ "log"
+
 	"github.com/allegro/bigcache"
 	_ "github.com/casbin/casbin"
 	"github.com/gin-contrib/sessions"
@@ -23,7 +25,9 @@ func init() {
 }
 func AclMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.FullPath() == "/login" {
+
+		//log.Println("check: " + c.Request.Method)
+		if c.Request.Method == "/login" {
 			c.Next()
 			return
 		}
@@ -38,6 +42,7 @@ func AclMiddleware() gin.HandlerFunc {
 				"success": false,
 				"message": "access denied!",
 			})
+			c.Abort()
 			return
 		}
 		c.Next()
@@ -45,5 +50,5 @@ func AclMiddleware() gin.HandlerFunc {
 
 }
 func filter(c *gin.Context, claim string) bool {
-	return true
+	return false
 }

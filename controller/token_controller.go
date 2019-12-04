@@ -42,6 +42,7 @@ func list() *[]model.DeployedToken {
 
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
 		method := c.Request.Method
 
 		c.Header("Access-Control-Allow-Origin", "*")
