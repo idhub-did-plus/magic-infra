@@ -33,7 +33,11 @@ func AclMiddleware() gin.HandlerFunc {
 		}
 		session := sessions.Default(c)
 		if nil == session.Get("claim") {
-			c.Redirect(http.StatusTemporaryRedirect, "/login")
+			c.JSON(http.StatusForbidden, gin.H{
+				"success": false,
+				"message": "please login!",
+			})
+			c.Abort()
 			return
 		}
 		claim := session.Get("claim").(string) //从session取出当前用户选中的角色
