@@ -27,7 +27,7 @@ func AclMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		//log.Println("check: " + c.Request.Method)
-		if c.Request.Method == "/login" {
+		if c.FullPath() == "/login" {
 			c.Next()
 			return
 		}

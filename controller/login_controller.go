@@ -12,12 +12,12 @@ func recover(timestamp string, claim string, signed string) string {
 	return "kk"
 }
 func Login(c *gin.Context) {
-	address, timestamp, claim, signed := c.PostForm("address"), c.PostForm("timestamp"), c.PostForm("claim"), c.PostForm("signed")
+	address, timestamp, claim, signed := c.Query("address"), c.Query("timestamp"), c.Query("claim"), c.Query("signed")
 	recaddress := recover(timestamp, claim, signed)
 	if recaddress != address {
 		c.JSON(http.StatusOK, gin.H{
-			"success": true,
-			"message": "saved!",
+			"success": false,
+			"message": "invalid signature!",
 		})
 		return
 	}
