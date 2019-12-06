@@ -12,17 +12,30 @@ import (
 
 const abiraw = `[
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
-			{
-				"name": "param",
-				"type": "address"
-			}
+		  {
+			"name": "issuer",
+			"type": "address"
+		  },
+		  {
+			"name": "subject",
+			"type": "address"
+		  },
+		  {
+			"name": "key",
+			"type": "bytes32"
+		  }
 		],
-		"name": "addrTy",
-		"outputs": [],
+		"name": "getClaim",
+		"outputs": [
+		  {
+			"name": "",
+			"type": "bytes32"
+		  }
+		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]`
