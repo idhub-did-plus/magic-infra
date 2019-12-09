@@ -12,6 +12,24 @@ func recover(identity string, timestamp string, claim string, signed string) str
 	return identity
 }
 func Login(c *gin.Context) {
+	action := c.Query("action")
+	if action == "reentry"{
+		session := sessions.Default(c)
+		claim := session.Get("claim")
+		if  nil != claim {
+			c.JSON(http.StatusOK, gin.H{
+				"success": true,
+				"claim": claim,
+				"message": "login successful!",
+			})
+		}else{
+			c.JSON(http.StatusOK, gin.H{
+				"success": false,
+				"message": "invalid signature!",
+			})
+		}
+		return
+	}
 	address, timestamp, claim, signed := c.Query("identity"), c.Query("timestamp"), c.Query("claim"), c.Query("signature")
 	recaddress := recover(address, timestamp, claim, signed)
 	if recaddress != address {
@@ -24,10 +42,12 @@ func Login(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Set("claim", claim)
 	session.Save()
+	cl := session.Get("claim").(string)
+	
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"claim": claim,
+		"claim": cl,
 		"message": "login successful!",
 	})
 
