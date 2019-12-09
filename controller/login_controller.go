@@ -8,12 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func recover(timestamp string, claim string, signed string) string {
-	return "kk"
+func recover(identity string, timestamp string, claim string, signed string) string {
+	return identity
 }
 func Login(c *gin.Context) {
-	address, timestamp, claim, signed := c.Query("address"), c.Query("timestamp"), c.Query("claim"), c.Query("signed")
-	recaddress := recover(timestamp, claim, signed)
+	address, timestamp, claim, signed := c.Query("identity"), c.Query("timestamp"), c.Query("claim"), c.Query("signature")
+	recaddress := recover(address, timestamp, claim, signed)
 	if recaddress != address {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
@@ -27,7 +27,7 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "saved!",
+		"message": "login successful!",
 	})
 
 }
