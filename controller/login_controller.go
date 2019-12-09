@@ -27,6 +27,7 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
+		"claim": claim,
 		"message": "login successful!",
 	})
 
