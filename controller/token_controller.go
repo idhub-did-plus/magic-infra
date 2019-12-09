@@ -17,7 +17,8 @@ import (
 )
 
 func ListDeployedTokens(c *gin.Context) {
-	tokens := list()
+	owner := c.Query("owner")
+	tokens := list(owner)
 	//result, _ := json.Marshal(&tokens)
 	c.JSON(200, gin.H{
 		"success": true,
@@ -25,14 +26,14 @@ func ListDeployedTokens(c *gin.Context) {
 	})
 
 }
-func list() *[]model.DeployedToken {
+func list(owner string) *[]model.DeployedToken {
 	session := service.Session()
 
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("InfraRepository").C("DeployedToken")
 	result := []model.DeployedToken{}
-	err := c.Find(bson.M{"name": "byq"}).Limit(10).All(&result)
+	err := c.Find(bson.M{"ownerAccount": owner}).Limit(10).All(&result)
 	if err != nil {
 
 	}
@@ -81,6 +82,7 @@ func SaveDeployedToken(c *gin.Context) {
 	dec := json.NewDecoder(jsons)
 	result := model.DeployedToken{}
 	dec.Decode(&result)
+	result.OwnerAccount = result.DeployAccount
 
 	session := service.Session()
 

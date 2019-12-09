@@ -5,6 +5,7 @@ type DeployedToken struct {
 	Symbol          string
 	Decimals        string
 	ContractAddress string
+	OwnerAccount   string
 	DeployAccount   string
 	TokenType       string
 	Controllers     []string
