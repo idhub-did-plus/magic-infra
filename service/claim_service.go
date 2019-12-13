@@ -1,37 +1,27 @@
 package service
 
 import (
-    "context"
-    "log"
-    "fmt"
+	"fmt"
+	"log"
 
-    _"github.com/ethereum/go-ethereum"
-    "github.com/joho/godotenv"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
+
+	store "magic-infra/component" // for demo
 )
 
-var myenv map[string]string
+func main() {
+	client, err := ethclient.Dial("https://rinkeby.infura.io")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-const envLoc = ".env"
+	address := common.HexToAddress("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
+	instance, err := store.NewComponentCaller(address, client)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-func loadEnv() {
-    var err error
-    if myenv, err = godotenv.Read(envLoc); err != nil {
-        log.Printf("could not load env from %s: %v", envLoc, err)
-    }
-}
-
-func main(){
-    loadEnv()
-
-    ctx := context.Background()
-
-    client, err := ethclient.Dial(os.Getenv("GATEWAY"))
-    if err != nil {
-        log.Fatalf("could not connect to Ethereum gateway: %v\n", err)
-    }
-    defer client.Close()
-
-    accountAddress := common.HexToAddress("<enter_ethereum_address>")
-    balance, _ := client.BalanceAt(ctx, accountAddress, nil)
-    fmt.Printf("Balance: %d\n",balance)
+	fmt.Println("contract is loaded")
+	_ = instance
 }
