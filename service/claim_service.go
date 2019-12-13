@@ -23,10 +23,11 @@ func main() {
 	identity := common.HexToAddress("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
 	var data []byte = []byte("valid investor")
 	array := common.BytesToHash(data).Bytes()
-	var array32 [32]byte
-	copy(array32[:], array)
+	var claimType [32]byte
+	copy(claimType[:], array)
 
-	instance.GetClaim(&bind.CallOpts{}, issuer, identity, array32)
+	claim, err := instance.GetClaim(&bind.CallOpts{}, issuer, identity, claimType)
+	_ = claim
 	if err != nil {
 		log.Fatal(err)
 	}
