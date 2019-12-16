@@ -2,6 +2,7 @@
 package controller
 
 import (
+	"magic-infra/component"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -11,18 +12,28 @@ import (
 func recover(identity string, timestamp string, claim string, signed string) string {
 	return identity
 }
+func hasClaim(identity string, key string, value string) bool {
+	claim, err := component.ClaimService.GetClaim(key)
+	if err != nil {
+		return false
+
+	}
+
+	_ = claim
+	return true
+}
 func Login(c *gin.Context) {
 	action := c.Query("action")
-	if action == "reentry"{
+	if action == "reentry" {
 		session := sessions.Default(c)
 		claim := session.Get("claim")
-		if  nil != claim {
+		if nil != claim {
 			c.JSON(http.StatusOK, gin.H{
 				"success": true,
-				"claim": claim,
+				"claim":   claim,
 				"message": "login successful!",
 			})
-		}else{
+		} else {
 			c.JSON(http.StatusOK, gin.H{
 				"success": false,
 				"message": "invalid signature!",
@@ -43,11 +54,10 @@ func Login(c *gin.Context) {
 	session.Set("claim", claim)
 	session.Save()
 	cl := session.Get("claim").(string)
-	
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"claim": cl,
+		"claim":   cl,
 		"message": "login successful!",
 	})
 

@@ -35,7 +35,7 @@ func init() {
 
 }
 
-func (cs *ClaimServiceType) getClaim(key string) [32]byte {
+func (cs *ClaimServiceType) GetClaim(key string) ([32]byte, error) {
 
 	var data []byte = []byte(key)
 	array := common.BytesToHash(data).Bytes()
@@ -43,11 +43,7 @@ func (cs *ClaimServiceType) getClaim(key string) [32]byte {
 	copy(claimType[:], array)
 
 	claim, err := cs.caller.GetClaim(&bind.CallOpts{}, cs.issuer, cs.identity, claimType)
-	_ = claim
-	if err != nil {
-		log.Fatal(err)
 
-	}
-	return claim
+	return claim, err
 
 }
