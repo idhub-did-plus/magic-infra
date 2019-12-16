@@ -12,6 +12,13 @@
             "program": "${workspaceFolder}/main.go"
         },
         {
+            "name": "Launch claim",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/service/claim_service.go"
+        },
+        {
             "name": "Launch Package",
             "type": "go",
             "request": "launch",
