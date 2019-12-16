@@ -17,7 +17,7 @@ type ConfigType struct {
 var Config ConfigType
 
 func init() {
-	content, _ := ioutil.ReadFile("config.yaml")
+	content, _ := ioutil.ReadFile("../config.yaml")
 	Config = ConfigType{}
 	err := yaml.Unmarshal(content, &Config)
 
