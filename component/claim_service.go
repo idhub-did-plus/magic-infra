@@ -2,6 +2,7 @@ package component
 
 import (
 	"log"
+	"magic-infra/misc/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -37,10 +38,7 @@ func init() {
 
 func (cs *ClaimServiceType) GetClaim(key string) ([32]byte, error) {
 
-	var data []byte = []byte(key)
-	array := common.BytesToHash(data).Bytes()
-	var claimType [32]byte
-	copy(claimType[:], array)
+	var claimType = utils.Sha3(key)
 
 	claim, err := cs.caller.GetClaim(&bind.CallOpts{}, cs.issuer, cs.identity, claimType)
 

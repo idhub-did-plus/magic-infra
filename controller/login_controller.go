@@ -3,11 +3,11 @@ package controller
 
 import (
 	"magic-infra/component"
+	"magic-infra/misc/utils"
 	"net/http"
 
 	"bytes"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -21,10 +21,8 @@ func hasClaim(identity string, key string, value string) bool {
 		return false
 
 	}
-	var data []byte = []byte(value)
-	vdata := common.BytesToHash(data).Bytes()
-	var vhash [32]byte
-	copy(vhash[:], vdata)
+
+	var vhash = utils.Sha3(value)
 	bytes.Equal(vhash[:], claim[:])
 	return true
 }
