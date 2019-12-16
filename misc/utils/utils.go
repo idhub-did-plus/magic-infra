@@ -11,8 +11,8 @@ func Sha3(value string) [32]byte {
 	  hash := solsha3.SoliditySHA3(
         solsha3.Bytes32(value)
     )
-	array := common.BytesToHash(data).Bytes()
+	
 	var result [32]byte
-	copy(result[:], array)
+	copy(result[:], hash)
 	return result
 }
