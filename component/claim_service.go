@@ -2,6 +2,7 @@ package component
 
 import (
 	"log"
+	"magic-infra/config"
 	"magic-infra/misc/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -23,11 +24,11 @@ var ClaimService ClaimServiceType
 
 func init() {
 	ClaimService = ClaimServiceType{}
-	ClaimService.contractAddress = common.HexToAddress("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
+	ClaimService.contractAddress = common.HexToAddress(config.Config.ContractAddress)
 
-	ClaimService.issuer = common.HexToAddress("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
-	ClaimService.identity = common.HexToAddress("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
-	client, err := ethclient.Dial("http://127.0.0.1:7545")
+	ClaimService.issuer = common.HexToAddress(config.Config.Issuer)
+	ClaimService.identity = common.HexToAddress(config.Config.Identity)
+	client, err := ethclient.Dial(config.Config.Provider)
 	if err != nil {
 		log.Fatal(err)
 	}

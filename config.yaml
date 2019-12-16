@@ -1,0 +1,5 @@
+#冒号后面一定要有空格
+#缩进要用空格
+provider: "http://127.0.0.1:7545"
+identity: "0x147B8eb97fD247D06C4006D269c90C1908Fb5D54"
+contractAddress: "0x147B8eb97fD247D06C4006D269c90C1908Fb5D54"
