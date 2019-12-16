@@ -5,6 +5,9 @@ import (
 	"magic-infra/component"
 	"net/http"
 
+	"bytes"
+
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -18,8 +21,11 @@ func hasClaim(identity string, key string, value string) bool {
 		return false
 
 	}
-
-	_ = claim
+	var data []byte = []byte(value)
+	vdata := common.BytesToHash(data).Bytes()
+	var vhash [32]byte
+	copy(vhash[:], vdata)
+	bytes.Equal(vhash[:], claim[:])
 	return true
 }
 func Login(c *gin.Context) {
