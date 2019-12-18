@@ -60,19 +60,9 @@ func (s *S) TestStop(c *C) {
 	server.SetPath(c.MkDir())
 	defer server.Stop()
 
-	// Server should not be running.
-	process := server.ProcessTest()
-	c.Assert(process, IsNil)
-
 	session := server.Session()
 	addr := session.LiveServers()[0]
 	session.Close()
-
-	// Server should be running now.
-	process = server.ProcessTest()
-	p, err := os.FindProcess(process.Pid)
-	c.Assert(err, IsNil)
-	p.Release()
 
 	server.Stop()
 
