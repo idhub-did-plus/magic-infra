@@ -8,10 +8,15 @@ import (
 )
 
 type ConfigType struct {
-	Provider        string `yaml:"provider"`
-	Identity        string `yaml:"identity"`
-	ContractAddress string `yaml:"contractAddress"`
-	Issuer          string `yaml:"issuer"`
+	Contract struct {
+		Provider        string `yaml:"provider"`
+		Identity        string `yaml:"identity"`
+		ContractAddress string `yaml:"contractAddress"`
+		Issuer          string `yaml:"issuer"`
+	}
+	Mysql struct {
+		Url string `yaml:"url"`
+	}
 }
 
 var Config ConfigType

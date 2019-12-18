@@ -24,11 +24,11 @@ var ClaimService ClaimServiceType
 
 func init() {
 	ClaimService = ClaimServiceType{}
-	ClaimService.contractAddress = common.HexToAddress(config.Config.ContractAddress)
+	ClaimService.contractAddress = common.HexToAddress(config.Config.Contract.ContractAddress)
 
-	ClaimService.issuer = common.HexToAddress(config.Config.Issuer)
-	ClaimService.identity = common.HexToAddress(config.Config.Identity)
-	client, err := ethclient.Dial(config.Config.Provider)
+	ClaimService.issuer = common.HexToAddress(config.Config.Contract.Issuer)
+	ClaimService.identity = common.HexToAddress(config.Config.Contract.Identity)
+	client, err := ethclient.Dial(config.Config.Contract.Provider)
 	if err != nil {
 		log.Fatal(err)
 	}
