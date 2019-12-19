@@ -3,10 +3,7 @@ package controller
 
 import (
 	"magic-infra/contract"
-	"magic-infra/misc/utils"
 	"net/http"
-
-	"bytes"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -16,15 +13,12 @@ func recover(identity string, timestamp string, claim string, signed string) str
 	return identity
 }
 func hasClaim(identity string, key string, value string) bool {
-	claim, err := contract.ContractService.GetClaim(key)
-	if err != nil {
-		return false
+	has := contract.ContractService.HasClaim(identity, key, value)
+	return has
 
-	}
-
-	var vhash = utils.Sha3(value)
-	bytes.Equal(vhash[:], claim[:])
-	return true
+	// var vhash = utils.Sha3(value)
+	// bytes.Equal(vhash[:], claim[:])
+	// return true
 }
 func Login(c *gin.Context) {
 	action := c.Query("action")

@@ -40,11 +40,17 @@ func init() {
 
 }
 
-func (cs *ContractServiceType) GetClaim(key string) ([32]byte, error) {
+func (cs *ContractServiceType) HasClaim(identity string, key string, value string) bool {
 
+	return true
+
+}
+
+func (cs *ContractServiceType) GetClaim(identity string, key string) ([32]byte, error) {
+	id := common.HexToAddress(identity)
 	var claimType = utils.Sha3(key)
 
-	claim, err := cs.claimCaller.GetClaim(&bind.CallOpts{}, cs.issuer, cs.identity, claimType)
+	claim, err := cs.claimCaller.GetClaim(&bind.CallOpts{}, cs.issuer, id, claimType)
 
 	return claim, err
 
