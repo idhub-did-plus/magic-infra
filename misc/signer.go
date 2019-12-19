@@ -4,24 +4,30 @@ import (
 	"bytes"
 	"crypto/rand"
 	"encoding/hex"
-	"fmt"
+	"errors"
 	"strconv"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/crypto"
 	signer "github.com/ethereum/go-ethereum/signer/core"
 )
 
-func sign() []byte {
+func Challenge() (*signer.TypedData, error) {
+	// Replace this with the address of the user's wallet
 	walletAddress := "0x61e0499cF10d341A5E45FA9c211aF3Ba9A2b50ef"
 	salt := "some-random-string-or-hash-here"
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 
 	// Generate a random nonce to include in our challenge
 	nonceBytes := make([]byte, 32)
-	rand.Read(nonceBytes)
-
+	n, err := rand.Read(nonceBytes)
+	if n != 32 {
+		return nil, errors.New("nonce: n != 64 (bytes)")
+	} else if err != nil {
+		return nil, err
+	}
 	nonce := hex.EncodeToString(nonceBytes)
 
 	signerData := signer.TypedData{
@@ -43,7 +49,7 @@ func sign() []byte {
 			Name:    "ETHChallenger",
 			Version: "1",
 			Salt:    salt,
-			//ChainId: math.HexOrDecimal256,
+			ChainId: math.NewHexOrDecimal256(1),
 		},
 		Message: signer.TypedDataMessage{
 			"timestamp": timestamp,
@@ -51,14 +57,9 @@ func sign() []byte {
 			"nonce":     nonce,
 		},
 	}
-	typedDataHash, _ := signerData.HashStruct(signerData.PrimaryType, signerData.Message)
-	domainSeparator, _ := signerData.HashStruct("EIP712Domain", signerData.Domain.Map())
-
-	rawData := []byte(fmt.Sprintf("\x19\x01%s%s", string(domainSeparator), string(typedDataHash)))
-	challengeHash := crypto.Keccak256Hash(rawData)
-	return challengeHash.Bytes()
+	return &signerData, nil
 }
-func verify(storedChallengeHash []byte, userAddress common.Address, incomingMetamaskSignature string) bool {
+func Verify(storedChallengeHash []byte, userAddress common.Address, incomingMetamaskSignature string) bool {
 
 	// Decode the hex-encoded signature from metamask.
 	signature, _ := hex.DecodeString(incomingMetamaskSignature)
