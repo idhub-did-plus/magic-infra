@@ -24,7 +24,7 @@ var ClaimService ClaimServiceType
 
 func init() {
 	ClaimService = ClaimServiceType{}
-	ClaimService.contractAddress = common.HexToAddress(config.Config.Contract.ContractAddress)
+	ClaimService.contractAddress = common.HexToAddress(config.Config.Contract.Address780)
 
 	ClaimService.issuer = common.HexToAddress(config.Config.Contract.Issuer)
 	ClaimService.identity = common.HexToAddress(config.Config.Contract.Identity)

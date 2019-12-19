@@ -9,10 +9,11 @@ import (
 
 type ConfigType struct {
 	Contract struct {
-		Provider        string `yaml:"provider"`
-		Identity        string `yaml:"identity"`
-		ContractAddress string `yaml:"contractAddress"`
-		Issuer          string `yaml:"issuer"`
+		Provider    string `yaml:"provider"`
+		Identity    string `yaml:"identity"`
+		Address780  string `yaml:"address780"`
+		Address1484 string `yaml:"address1484"`
+		Issuer      string `yaml:"issuer"`
 	}
 	Mysql struct {
 		Url string `yaml:"url"`
