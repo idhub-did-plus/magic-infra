@@ -16,7 +16,7 @@ func recover(identity string, timestamp string, claim string, signed string) str
 	return identity
 }
 func hasClaim(identity string, key string, value string) bool {
-	claim, err := contract.ClaimService.GetClaim(key)
+	claim, err := contract.ContractService.GetClaim(key)
 	if err != nil {
 		return false
 
