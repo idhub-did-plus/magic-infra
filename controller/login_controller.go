@@ -2,7 +2,7 @@
 package controller
 
 import (
-	"magic-infra/component"
+	"magic-infra/contract"
 	"magic-infra/misc/utils"
 	"net/http"
 
@@ -16,7 +16,7 @@ func recover(identity string, timestamp string, claim string, signed string) str
 	return identity
 }
 func hasClaim(identity string, key string, value string) bool {
-	claim, err := component.ClaimService.GetClaim(key)
+	claim, err := contract.ClaimService.GetClaim(key)
 	if err != nil {
 		return false
 

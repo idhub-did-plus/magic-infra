@@ -49,3 +49,6 @@ const onSignatureComplete = (err, result) =>
 
     sendToServerForVerification(signature);
 }
+
+
+//abigen --abi erc780.abi --pkg claim --type Token --out erc780.go

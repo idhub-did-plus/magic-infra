@@ -1,4 +1,4 @@
-package component
+package contract
 
 import (
 	"log"
@@ -17,7 +17,7 @@ type ClaimServiceType struct {
 	url             string
 	client          *ethclient.Client
 
-	caller *ComponentCaller
+	caller *ClaimCaller
 }
 
 var ClaimService ClaimServiceType
@@ -33,7 +33,7 @@ func init() {
 		log.Fatal(err)
 	}
 	ClaimService.client = client
-	ClaimService.caller, _ = NewComponentCaller(ClaimService.contractAddress, ClaimService.client)
+	ClaimService.caller, _ = NewClaimCaller(ClaimService.contractAddress, ClaimService.client)
 
 }
 
