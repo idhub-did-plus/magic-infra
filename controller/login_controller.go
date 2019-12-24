@@ -34,7 +34,7 @@ func Login(c *gin.Context) {
 		} else {
 			c.JSON(http.StatusOK, gin.H{
 				"success": false,
-				"message": "invalid signature!",
+				"message": "not logged!",
 			})
 		}
 		return
@@ -57,6 +57,17 @@ func Login(c *gin.Context) {
 		"success": true,
 		"claim":   cl,
 		"message": "login successful!",
+	})
+
+}
+func Logout(c *gin.Context) {
+
+	session := sessions.Default(c)
+	session.Delete("claim")
+	session.Save()
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "logout success!",
 	})
 
 }

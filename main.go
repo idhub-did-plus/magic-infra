@@ -18,6 +18,7 @@ func main() {
 	r.Use(middleware.AclMiddleware())
 	r.POST("/saveDeployedToken", controller.SaveDeployedToken)
 	r.GET("/listDeployedTokens", controller.ListDeployedTokens)
-	r.Any("/login", controller.Login)
+	r.GET("/login", controller.Login)
+	r.GET("/logout", controller.Logout)
 	r.Run() // 在 0.0.0.0:8080 上监听并服务
 }
