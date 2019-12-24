@@ -7,9 +7,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"magic-infra/model"
-	"magic-infra/service"
 	"net/http"
+
+	"github.com/idhub-did-plus/magic-infra/model"
+	"github.com/idhub-did-plus/magic-infra/service"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
@@ -29,14 +30,14 @@ func ListDeployedTokens(c *gin.Context) {
 func list(owner string) *[]model.DeployedToken {
 	session := service.Session()
 
-	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("InfraRepository").C("DeployedToken")
 	result := []model.DeployedToken{}
-	err := c.Find(bson.M{"ownerAccount": owner}).Limit(10).All(&result)
+	err := c.Find(bson.M{"owneraccount": owner}).Limit(10).All(&result)
 	if err != nil {
 
 	}
+	defer session.Close()
 	return &result
 
 }

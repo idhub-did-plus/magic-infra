@@ -2,8 +2,8 @@
 package main
 
 import (
-	"magic-infra/controller"
-	"magic-infra/middleware"
+	"github.com/idhub-did-plus/magic-infra/controller"
+	"github.com/idhub-did-plus/magic-infra/middleware"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"

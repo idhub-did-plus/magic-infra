@@ -2,8 +2,9 @@
 package controller
 
 import (
-	"magic-infra/contract"
 	"net/http"
+
+	"github.com/idhub-did-plus/magic-infra/contract"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

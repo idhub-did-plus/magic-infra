@@ -2,8 +2,9 @@ package contract
 
 import (
 	"log"
-	"magic-infra/config"
-	"magic-infra/misc/utils"
+
+	"github.com/idhub-did-plus/magic-infra/config"
+	"github.com/idhub-did-plus/magic-infra/misc/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
