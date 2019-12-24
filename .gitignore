@@ -8,7 +8,7 @@
 *.test
 # testing
 /coverage
-
+__debug_bin
 # production
 /build
 
