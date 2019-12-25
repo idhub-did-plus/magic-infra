@@ -12,3 +12,4 @@ package main
 //https://www.alpineintel.com/issuing-and-verifying-eip-712-challenges-with-go/
 //https://www.tizi365.com/archives/340.html
 //https://books.studygolang.com/gopl-zh/ch2/ch2-06.html
+//https://zhuanlan.zhihu.com/p/33843378
