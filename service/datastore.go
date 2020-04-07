@@ -2,7 +2,8 @@ package service
 
 import (
 	"fmt"
-	"magic-infra/config"
+
+	"github.com/idhub-did-plus/magic-infra/config"
 
 	"gopkg.in/mgo.v2"
 )
