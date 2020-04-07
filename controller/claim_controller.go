@@ -16,7 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func register(c *gin.Context) {
+func claimList(c *gin.Context) {
 	body := c.Request.Body
 	jsonb, _ := ioutil.ReadAll(body)
 	jsonss := string(jsonb)
@@ -50,6 +50,6 @@ func register(c *gin.Context) {
 
 }
 
-func request_claim(c *gin.Context) {
+func issue_claim(c *gin.Context) {
 
 }
